@@ -27,6 +27,8 @@ function _solve_sd(p::NonSmoothProblem, params::NonSmoothSolver, x0::Vector{Floa
 
   x = copy(x0)
   for k in 1:params.n_iter
+    t0 = time_ns()
+
     # Perform a gradient step.
     g = p.g(x)
     x += dir * step(params.step, k, norm(g)) * g
@@ -51,7 +53,7 @@ function _solve_sd(p::NonSmoothProblem, params::NonSmoothSolver, x0::Vector{Floa
     end
 
     if info_callback !== nothing
-      info_callback(k, f, x, g, f_best, x_best)
+      info_callback(k, f, x, g, f_best, x_best, time_ns() - t0)
     end
   end
 

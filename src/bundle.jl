@@ -20,6 +20,8 @@ function solve(p::UnconstrainedNonSmoothProblem, params::BundleMethod, x0::Vecto
   # Start iterating.
   x = copy(x0)
   for k in 1:params.n_iter
+    t0 = time_ns()
+
     # Get the new test point (proximal step).
     @objective(m, Min, f + params.µ * sum((bx[i] - x[i])^2 for i in 1:3))
     optimize!(m)
@@ -53,7 +55,7 @@ function solve(p::UnconstrainedNonSmoothProblem, params::BundleMethod, x0::Vecto
     end
 
     if info_callback !== nothing
-      info_callback(k, f, x, g, f_best, x_best)
+      info_callback(k, f, x, g, f_best, x_best, time_ns() - t0)
     end
   end
 

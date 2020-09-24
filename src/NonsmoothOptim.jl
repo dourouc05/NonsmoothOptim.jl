@@ -82,6 +82,8 @@ function solve(::NonSmoothProblem, solver::NonSmoothSolver, ::Vector{Float64}; k
   #   - A problem to solve.
   #   - An NSO method.
   #   - An initial iterate.
+  # Keyword arguments: 
+  #   - info_callback: (k, f, x, g, f_best, x_best, t_iter) -> nothing
   # Output: best solution found (Vector{Float64})
   error("The following solver is not yet implemented: $solver")
 end
