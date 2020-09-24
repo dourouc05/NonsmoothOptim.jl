@@ -23,7 +23,7 @@ function _solve_sd(p::NonSmoothProblem, params::NonSmoothSolver, x0::Vector{Floa
   f_best = -Inf
   x_best = copy(x0)
 
-  dir = ((p.sense == Minimise) ? -1 : 1)::Float64
+  dir = ((p.sense == Minimise) ? -1.0 : 1.0)::Float64
 
   x = copy(x0)
   for k in 1:params.n_iter

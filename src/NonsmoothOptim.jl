@@ -2,6 +2,8 @@
 
 module NonsmoothOptim
 
+import JuMP
+
 export OptimisationSense, Minimise, Maximise,
        UnconstrainedNonSmoothProblem, ConstrainedNonSmoothProblem, ProjectedConstrainedNonSmoothProblem, 
        NonSmoothSolver, UnconstrainedNonSmoothSolver, ConstrainedNonSmoothSolver, ProjectedConstrainedNonSmoothSolver, 
@@ -77,7 +79,7 @@ abstract type UnconstrainedNonSmoothSolver <: NonSmoothSolver end
 abstract type ConstrainedNonSmoothSolver <: NonSmoothSolver end
 abstract type ProjectedConstrainedNonSmoothSolver <: ConstrainedNonSmoothSolver end
 
-function solve(::NonSmoothProblem, solver::NonSmoothSolver, ::Vector{Float64}; kwargs...) 
+function solve#(::NonSmoothProblem, solver::NonSmoothSolver, ::Vector{Float64}; kwargs...) 
   # Input: 
   #   - A problem to solve.
   #   - An NSO method.
@@ -85,7 +87,7 @@ function solve(::NonSmoothProblem, solver::NonSmoothSolver, ::Vector{Float64}; k
   # Keyword arguments: 
   #   - info_callback: (k, f, x, g, f_best, x_best, t_iter) -> nothing
   # Output: best solution found (Vector{Float64})
-  error("The following solver is not yet implemented: $solver")
+  # error("The following solver is not yet implemented: $solver")
 end
 
 ## Rules for step sizes, likely to be used by several solvers.

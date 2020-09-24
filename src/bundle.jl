@@ -10,12 +10,12 @@ function solve(p::UnconstrainedNonSmoothProblem, params::BundleMethod, x0::Vecto
   @assert length(x0) == p.dimension
 
   # Build the bundle model.
-  m = Model(params.solver_factory)
-  f = @variable(m)
-  bx = @variable(m, [1:p.dimension])
+  m = JuMP.Model(params.solver_factory)
+  f = @JuMP.variable(m)
+  bx = @JuMP.variable(m, [1:p.dimension])
 
   # Create the first cutting plane with the starting iterate (i.e. the program will never be unbounded).
-  @constraint(m, f >= p.f(x0) + dot(p.g(x0), bx - x0))
+  @JuMP.constraint(m, f >= p.f(x0) + dot(p.g(x0), bx - x0))
 
   # Start iterating.
   x = copy(x0)
@@ -23,21 +23,21 @@ function solve(p::UnconstrainedNonSmoothProblem, params::BundleMethod, x0::Vecto
     t0 = time_ns()
 
     # Get the new test point (proximal step).
-    @objective(m, Min, f + params.µ * sum((bx[i] - x[i])^2 for i in 1:3))
-    optimize!(m)
-    @assert termination_status(m) == MOI.OPTIMAL
+    @JuMP.objective(m, Min, f + params.µ * sum((bx[i] - x[i])^2 for i in 1:3))
+    JuMP.optimize!(m)
+    @assert JuMP.termination_status(m) == MOI.OPTIMAL
 
     y = value.(bx)
-    @constraint(m, f >= p.f(y) + dot(p.g(y), bx - y))
+    @JuMP.constraint(m, f >= p.f(y) + dot(p.g(y), bx - y))
 
     # Is this point optimum? 
-    @objective(m, Min, f)
-    c = @constraint(m, bx .== y)
-    optimize!(m)
-    @assert termination_status(m) == MOI.OPTIMAL
+    @JuMP.objective(m, Min, f)
+    c = @JuMP.constraint(m, bx .== y)
+    JuMP.optimize!(m)
+    @assert JuMP.termination_status(m) == MOI.OPTIMAL
 
-    f_bundle_y = value(f)
-    delete(m, c)
+    f_bundle_y = JuMP.value(f)
+    JuMP.delete(m, c)
     
     f = p.f(x)
     v = f_bundle_y - f
