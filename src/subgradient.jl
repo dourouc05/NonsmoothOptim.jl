@@ -12,12 +12,12 @@ struct ProjectedSubgradientMethod <: ProjectedConstrainedNonSmoothSolver
   n_iter::Int 
 end
 
-function solve(p::ProjectedNonSmoothProblem, params::ProjectedSubgradientMethod, x0::Vector{Float64}; kwargs...) 
+function solve(p::ProjectedConstrainedNonSmoothProblem, params::ProjectedSubgradientMethod, x0::Vector{Float64}; kwargs...) 
   return _solve_sd(p, params, x0; kwargs...)
 end
 
 function _solve_sd(p::NonSmoothProblem, params::NonSmoothSolver, x0::Vector{Float64}; info_callback::Union{Nothing, Function}=nothing)
-  # Assumption for p' and params' types: either (UnconstrainedNonSmoothProblem, SubgradientMethod) or (ProjectedNonSmoothProblem, ProjectedSubgradientMethod).
+  # Assumption for p' and params' types: either (UnconstrainedNonSmoothProblem, SubgradientMethod) or (ProjectedConstrainedNonSmoothProblem, ProjectedSubgradientMethod).
   @assert length(x0) == p.dimension
 
   f_best = -Inf
@@ -34,7 +34,7 @@ function _solve_sd(p::NonSmoothProblem, params::NonSmoothSolver, x0::Vector{Floa
     x += dir * step(params.step, k, norm(g)) * g
 
     # Projection, if need be.
-    if p isa ProjectedNonSmoothProblem
+    if p isa ProjectedConstrainedNonSmoothProblem
       x = p.project(x)
     end
 

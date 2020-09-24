@@ -2,7 +2,7 @@
 
 module NonsmoothOptim
 
-export OptimisationSense, 
+export OptimisationSense, Minimise, Maximise,
        UnconstrainedNonSmoothProblem, ConstrainedNonSmoothProblem, ProjectedConstrainedNonSmoothProblem, 
        NonSmoothSolver, UnconstrainedNonSmoothSolver, ConstrainedNonSmoothSolver, ProjectedConstrainedNonSmoothSolver, 
        solve, 
@@ -128,5 +128,9 @@ function step(rule::InverseStepSize, n_iter::Int, ::Float64)
     return rule.step / n_iter
   end
 end
+
+# Actual code.
+include("subgradient.jl")
+include("bundle.jl")
 
 end
