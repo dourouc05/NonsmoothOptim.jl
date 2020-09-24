@@ -3,8 +3,8 @@ struct SubgradientMethod <: UnconstrainedNonSmoothSolver
   n_iter::Int 
 end
 
-function solve(p::UnconstrainedNonSmoothProblem, params::SubgradientMethod, x0::Vector{Float64}) 
-  return _solve_sd(p, params, x0)
+function solve(p::UnconstrainedNonSmoothProblem, params::SubgradientMethod, x0::Vector{Float64}; kwargs...) 
+  return _solve_sd(p, params, x0; kwargs...)
 end
 
 struct ProjectedSubgradientMethod <: ProjectedConstrainedNonSmoothSolver
@@ -12,11 +12,11 @@ struct ProjectedSubgradientMethod <: ProjectedConstrainedNonSmoothSolver
   n_iter::Int 
 end
 
-function solve(p::ProjectedNonSmoothProblem, params::ProjectedSubgradientMethod, x0::Vector{Float64}) 
-  return _solve_sd(p, params, x0)
+function solve(p::ProjectedNonSmoothProblem, params::ProjectedSubgradientMethod, x0::Vector{Float64}; kwargs...) 
+  return _solve_sd(p, params, x0; kwargs...)
 end
 
-function _solve_sd(p::NonSmoothProblem, params::NonSmoothSolver, x0::Vector{Float64})
+function _solve_sd(p::NonSmoothProblem, params::NonSmoothSolver, x0::Vector{Float64}; info_callback::Union{Nothing, Function}=nothing)
   # Assumption for p' and params' types: either (UnconstrainedNonSmoothProblem, SubgradientMethod) or (ProjectedNonSmoothProblem, ProjectedSubgradientMethod).
   @assert length(x0) == p.dimension
 
@@ -48,6 +48,10 @@ function _solve_sd(p::NonSmoothProblem, params::NonSmoothSolver, x0::Vector{Floa
         f_best = f
         x_best = x
       end
+    end
+
+    if info_callback !== nothing
+      info_callback(k, f, x, g, f_best, x_best)
     end
   end
 

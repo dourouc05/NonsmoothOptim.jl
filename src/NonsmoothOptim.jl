@@ -77,7 +77,7 @@ abstract type UnconstrainedNonSmoothSolver <: NonSmoothSolver end
 abstract type ConstrainedNonSmoothSolver <: NonSmoothSolver end
 abstract type ProjectedConstrainedNonSmoothSolver <: ConstrainedNonSmoothSolver end
 
-function solve(::NonSmoothProblem, solver::NonSmoothSolver, ::Vector{Float64}) 
+function solve(::NonSmoothProblem, solver::NonSmoothSolver, ::Vector{Float64}; kwargs...) 
   # Input: 
   #   - A problem to solve.
   #   - An NSO method.

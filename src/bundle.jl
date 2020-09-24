@@ -5,7 +5,7 @@ struct BundleMethod <: UnconstrainedNonSmoothSolver
   n_iter::Int
 end
 
-function solve(p::UnconstrainedNonSmoothProblem, params::BundleMethod, x0::Vector{Float64}) 
+function solve(p::UnconstrainedNonSmoothProblem, params::BundleMethod, x0::Vector{Float64}; info_callback::Union{Nothing, Function}=nothing) 
   @assert p.sense == Minimise # TODO: current limitation.
   @assert length(x0) == p.dimension
 
@@ -50,6 +50,10 @@ function solve(p::UnconstrainedNonSmoothProblem, params::BundleMethod, x0::Vecto
     else
       # Short step.
       nothing
+    end
+
+    if info_callback !== nothing
+      info_callback(k, f, x, g, f_best, x_best)
     end
   end
 
