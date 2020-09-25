@@ -2,6 +2,8 @@
 
 module NonsmoothOptim
 
+using LinearAlgebra
+
 import JuMP
 
 export OptimisationSense, Minimise, Maximise,
@@ -79,7 +81,7 @@ abstract type UnconstrainedNonSmoothSolver <: NonSmoothSolver end
 abstract type ConstrainedNonSmoothSolver <: NonSmoothSolver end
 abstract type ProjectedConstrainedNonSmoothSolver <: ConstrainedNonSmoothSolver end
 
-function solve#(::NonSmoothProblem, solver::NonSmoothSolver, ::Vector{Float64}; kwargs...) 
+function solve
   # Input: 
   #   - A problem to solve.
   #   - An NSO method.
@@ -87,20 +89,18 @@ function solve#(::NonSmoothProblem, solver::NonSmoothSolver, ::Vector{Float64}; 
   # Keyword arguments: 
   #   - info_callback: (k, f, x, g, f_best, x_best, t_iter) -> nothing
   # Output: best solution found (Vector{Float64})
-  # error("The following solver is not yet implemented: $solver")
 end
 
 ## Rules for step sizes, likely to be used by several solvers.
 
 abstract type StepSizeRule end
 
-function step(rule::StepSizeRule, ::Int, ::Float64)
+function step
   # Input: 
   #   - Rule to apply. 
   #   - Number of iterations. 
   #   - Norm of the subgradient.
   # Output: step (Float64)
-  error("The following step-size rule is not yet implemented: $rule")
 end
 
 struct ConstantStepSize <: StepSizeRule
