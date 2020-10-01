@@ -1,7 +1,7 @@
 name = "NonsmoothOptim"
 uuid = "0dfc7a1c-e419-4470-a3bc-787e626244db"
 authors = ["Thibaut Cuvelier <cuvelier.thibaut@gmail.com> and contributors"]
-version = "0.1.0"
+version = "0.1.1"
 
 [deps]
 JuMP = "4076af6c-e467-56ae-b986-b466b2749572"
