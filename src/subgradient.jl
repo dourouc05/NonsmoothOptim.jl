@@ -20,10 +20,10 @@ function _solve_sd(p::NonSmoothProblem, params::NonSmoothSolver, x0::Vector{Floa
   # Assumption for p' and params' types: either (UnconstrainedNonSmoothProblem, SubgradientMethod) or (ProjectedConstrainedNonSmoothProblem, ProjectedSubgradientMethod).
   @assert length(x0) == p.dimension
 
-  x_best = copy(x0)
   if p isa ProjectedConstrainedNonSmoothProblem
     x0 = p.project(x0)
   end
+  x_best = copy(x0)
   f_best = p.f(x0)
 
   dir = ((p.sense == Minimise) ? -1.0 : 1.0)::Float64
